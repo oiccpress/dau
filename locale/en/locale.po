@@ -1,0 +1,5 @@
+msgid "plugins.importexport.dau.displayName"
+msgstr "DOI and URL Export"
+
+msgid "plugins.importexport.dau.description.short"
+msgstr "Export articles with DOI and URLs"
