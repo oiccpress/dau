@@ -36,7 +36,7 @@ class DAUExportPlugin extends ImportExportPlugin
         header('content-disposition: attachment; filename=dois-and-urls-' . $this->_context->getAcronym('en') . '.csv');
 
         $fh = fopen('php://output', 'w');
-        fputcsv($fh, [ 'article_title', 'doi', 'url' ]);
+        fputcsv($fh, [ 'article_title', 'doi', 'url', 'volume', 'issue', ]);
 
         $submissionCollector = Repo::submission()->getCollector();
         $submissions = $submissionCollector
@@ -51,10 +51,14 @@ class DAUExportPlugin extends ImportExportPlugin
                 return;
             }
 
+            $issue = Repo::issue()->get( $publication->getIssueId(), $this->_context->getId() );
+
             $data = [
                 $publication->getLocalizedFullTitle(null, 'html'),
                 $publication->getStoredPubId('doi'),
-                $request->url($this->_context->getPath(), 'article', 'view', [$submission->getId()])
+                $request->url($this->_context->getPath(), 'article', 'view', [$submission->getId()]),
+                $issue->getVolume(),
+                $issue->getNumber(),
             ];
             fputcsv($fh, $data);
 
